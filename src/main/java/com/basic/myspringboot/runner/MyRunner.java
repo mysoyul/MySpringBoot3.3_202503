@@ -1,5 +1,6 @@
 package com.basic.myspringboot.runner;
 
+import com.basic.myspringboot.config.CustomVO;
 import com.basic.myspringboot.property.MybootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,11 @@ public class MyRunner implements ApplicationRunner {
     @Autowired
     MybootProperties properties;
 
+    @Autowired
+    CustomVO customVO;
+
     public void run(ApplicationArguments args) throws Exception {
+        System.out.println("현재 활성화된 CustomerVO " + customVO);
         System.out.println("@Value myboot.name " + name);
         System.out.println("@Value myboot.age " + age);
         System.out.println("Environment myboot.fullName " +
