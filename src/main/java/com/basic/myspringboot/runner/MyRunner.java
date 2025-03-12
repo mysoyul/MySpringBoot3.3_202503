@@ -2,6 +2,8 @@ package com.basic.myspringboot.runner;
 
 import com.basic.myspringboot.config.CustomVO;
 import com.basic.myspringboot.property.MybootProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -26,19 +28,19 @@ public class MyRunner implements ApplicationRunner {
     @Autowired
     CustomVO customVO;
 
-    public void run(ApplicationArguments args) throws Exception {
-        System.out.println("현재 활성화된 CustomerVO " + customVO);
-        System.out.println("@Value myboot.name " + name);
-        System.out.println("@Value myboot.age " + age);
-        System.out.println("Environment myboot.fullName " +
-                env.getProperty("myboot.fullName"));
-        System.out.println("Environment server.port " +
-                env.getProperty("local.server.port"));
-        System.out.println("MybootProperties getFullName " +
-                properties.getFullName());
+    private Logger logger = LoggerFactory.getLogger(MyRunner.class);
 
-        System.out.println("VM Arguments foo : " + args.containsOption("foo"));
-        System.out.println("Program Arguments bar : " + args.containsOption("bar"));
+    public void run(ApplicationArguments args) throws Exception {
+        logger.info("현재 로거 구현체 클래스명 {}", logger.getClass().getName());
+        logger.info("현재 활성화된 CustomerVO {}", customVO);
+        logger.info("@Value myboot.name {}", name);
+        logger.info("@Value myboot.age {}", age);
+        logger.info("Environment myboot.fullName {}", env.getProperty("myboot.fullName"));
+        logger.info("Environment server.port {}", env.getProperty("local.server.port"));
+        logger.info("MybootProperties getFullName {}", properties.getFullName());
+
+        logger.debug("VM Arguments foo : {}", args.containsOption("foo"));
+        logger.debug("Program Arguments bar : {}", args.containsOption("bar"));
 
         //환경변수 이름을 출력하기
         args.getOptionNames() //Set<String>
