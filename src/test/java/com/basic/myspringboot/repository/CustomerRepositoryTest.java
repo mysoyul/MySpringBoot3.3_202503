@@ -17,7 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerRepositoryTest {
     @Autowired
     CustomerRepository repository;
-    
+
+
     @Test
     //value=false 이면 rollback 처리 되지 않음
     @Rollback(value = false)
@@ -46,5 +47,10 @@ class CustomerRepositoryTest {
                 cust -> System.out.println(cust.getCustomerName()), //Customer
                 () -> System.out.println((">> customer not found")) //Runnable
                 );
+        //T orElseThrow(Supplier<? extends X> exceptionSupplier)  X extends Throwable
+        //Supplier : T get()
+        Customer aCustomer = repository.findByCustomerId("B001") //Optional<Customer>
+                .orElseThrow(() -> new RuntimeException("Customer Not Found"));
+        //assertThat(aCustomer).isNull();
     }
 }
