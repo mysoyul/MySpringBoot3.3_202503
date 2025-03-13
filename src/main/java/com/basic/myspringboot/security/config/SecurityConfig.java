@@ -1,7 +1,10 @@
 package com.basic.myspringboot.security.config;
 
+import com.basic.myspringboot.security.service.UserInfoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,7 +28,7 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     // /api/users/welcome 요청은 인증이 없어도 접근가능
-                    auth.requestMatchers("/api/users/welcome").permitAll()
+                    auth.requestMatchers("/api/users/welcome","/userinfos/new").permitAll()
                              // /api/users/**   요청은 인증이 필요함  
                             .requestMatchers("/api/users/**").authenticated();
                 })
@@ -37,18 +40,34 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //DaoAuthenticationProvider 스프링빈으로 설정
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails admin = User.withUsername("adminboot")
-                .password(encoder.encode("pwd1"))
-                .roles("ADMIN")
-                .build();
-        UserDetails user = User.withUsername("userboot")
-                .password(encoder.encode("pwd2"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(admin, user);
+    public AuthenticationProvider authenticationProvider(){
+        //DaoAuthenticationProvider 에게 UserDetailsService 와 PasswordEncode를 설정
+        DaoAuthenticationProvider authenticationProvider =
+                new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
     }
+    //커스텀 한 UserDetailsService 스프링빈으로 설정
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserInfoUserDetailsService();
+    }
+
+//    @Bean
+//    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
+//        UserDetails admin = User.withUsername("adminboot")
+//                .password(encoder.encode("pwd1"))
+//                .roles("ADMIN")
+//                .build();
+//        UserDetails user = User.withUsername("userboot")
+//                .password(encoder.encode("pwd2"))
+//                .roles("USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(admin, user);
+//    }
 
 
 }
