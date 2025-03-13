@@ -18,6 +18,20 @@ class CustomerRepositoryTest {
     @Autowired
     CustomerRepository repository;
 
+    @Test
+    @Rollback(value = false)
+    void selectUpdate() {
+        Customer customer = new Customer();
+        customer.setCustomerId("A001");
+        customer.setCustomerName("스프링");
+        Customer saveCustomer = repository.save(customer);
+        assertThat(saveCustomer).isNotNull();
+
+        Customer customer1 = repository.findByCustomerId("A001")
+                .orElseThrow();
+        //update 요청하기
+        customer1.setCustomerName("스프링부트");
+    }
 
     @Test
     //value=false 이면 rollback 처리 되지 않음
