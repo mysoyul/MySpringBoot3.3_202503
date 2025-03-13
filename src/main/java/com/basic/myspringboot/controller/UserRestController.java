@@ -65,4 +65,8 @@ public class UserRestController {
         return ResponseEntity.ok(msg);
     }
 
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Welcome this endpoint is not secure";
+    }
 }
