@@ -19,4 +19,5 @@ public class Customer {
 
     @Column(nullable = false, name = "cust_name")
     private String customerName;
+
 }
