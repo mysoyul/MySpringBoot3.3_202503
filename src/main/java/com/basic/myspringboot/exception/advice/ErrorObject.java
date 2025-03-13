@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+//Exception 이 발생했을때 에러정보를 저장하는 역할
 @Data
 public class ErrorObject {
     private Integer statusCode;
