@@ -21,8 +21,10 @@ public class UserInfoUserDetails implements UserDetails {
         this.userInfo = userInfo;
         this.email=userInfo.getEmail();
         this.password=userInfo.getPassword();
+        //[ROLE_ADMIN, ROLE_USER]
         this.authorities= Arrays.stream(userInfo.getRoles().split(","))
-                .map(SimpleGrantedAuthority::new)
+                //.map(SimpleGrantedAuthority::new)
+                .map(roleName -> new SimpleGrantedAuthority(roleName))
                 .collect(Collectors.toList());
     }
 
@@ -31,6 +33,12 @@ public class UserInfoUserDetails implements UserDetails {
         return authorities;
     }
 
+    //getPassword() 와 getUsername() 메서드는
+    /*
+       getPassword() 와 getUsername() 메서드는
+       실제로 인증을 처리하는 AuthenticationManager가 인증을 처리할 때
+       사용합니다.
+     */
     @Override
     public String getPassword() {
         return password;
