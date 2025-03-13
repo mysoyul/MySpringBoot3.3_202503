@@ -36,7 +36,15 @@ class CustomerRepositoryTest {
         if(optionalById.isPresent()){
             Customer existCustomer = optionalById.get();
             assertThat(existCustomer.getCustomerName()).isEqualTo("스프링");
+        }else {
+            System.out.println("customer not found");
         }
 
+        //ifPresentOrElse(Consumer<? super T> action, Runnable emptyAction)
+        //Consumer : void accept(T), Runnable : void run()
+        optionalById.ifPresentOrElse(
+                cust -> System.out.println(cust.getCustomerName()), //Customer
+                () -> System.out.println((">> customer not found")) //Runnable
+                );
     }
 }
